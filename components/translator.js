@@ -5,32 +5,44 @@ const britishOnly = require('./british-only.js')
 var AO = new Object(americanOnly);
 var ATBS = new Object(americanToBritishSpelling);
 var ATBT = new Object(americanToBritishTitles);
-var BO = new Object(britishOnly);
     
 class Translator {
     traTAm(str) {
+        let sentence = str;
         console.log("Translating to American")
-        var result = '';
-        let strSplit = str.split(' ');
-        for (let i = 0; i < strSplit.length; i++) {
-            if (AO.hasOwnProperty(strSplit[i])) {
-                result += ATBS[strSplit[i]] + " ";
-            }
-            else {
-                result += strSplit[i]+" ";
+        var keys = Object.keys(britishOnly);
+        for (let i = 0; i < keys.length; i++) {
+            // use `` to get the value from variables and treat them as string
+            let regex = new RegExp(`(${keys[i]}\\b)`, "gi");
+            if (sentence.match(regex)) {
+                let trans = str.replace(regex, britishOnly[keys[i]]);
+                sentence = trans;
             }
         }
-        return result;
+        keys = Object.keys(ATBS);
+        for (let i = 0; i < keys.length; i++) {
+            let regex = new RegExp(keys[i], "gi");
+            console.log(regex);
+            if (sentence.match(regex)) {
+                console.log('replace')
+                let trans = str.replace(regex, ATBS[keys[i]]);
+                sentence = trans;
+            }
+        }
+        return sentence;
     }
 
     traTBr(str) {
         console.log("Translating to British")
         var result = '';
         if (ATBS.hasOwnProperty(str)) {
-            result += ATBS[str] + " ";
+            result += ATBS[str];
         }
-        else if (BO.hasOwnProperty(str)){
-            result += BO[str];
+        else if (AO.hasOwnProperty(str)){
+            result += AO[str];
+        }
+        else{
+            result += str;
         }
         return result;
     }

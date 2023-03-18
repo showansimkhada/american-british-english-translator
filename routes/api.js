@@ -9,6 +9,7 @@ module.exports = function (app) {
     .post((req, res) => {
       let locale = req.body.locale;
       var text = req.body.text;
+      text.trim('.');
       if (!text) {
         res.json({
           "error": "No text to translate"
@@ -16,29 +17,33 @@ module.exports = function (app) {
       } else {
         // translate to british
         if (locale === 'american-to-british') {
-          let result = translator.traTBr(text);
-          if (result.split() === text.split()) {
-            console.log('same')
+          // Translate sentence
+          // Split the words
+          var wordArr = text.split(' ');
+          // check every words and translate
+          var result = [];
+          for (let i = 0; i < wordArr.length; i++) {
+            let word = translator.traTBr(wordArr[i]);
+            if (word !== wordArr[i]) {
+              console.log('highlight')
+            }
+            result.push(word);
           }
-          res.json({
-            translation: result
+          res.json({ 
+            translation: result.join(' ')
           })
         } else {
-          // translate to american
-          // Split the texts non charaters
-          // Split words and go through every words
-          // If it begain with capital letters and result is same then output should be eveythings look good
-          // else just output all
-          // all output first word starts with capital letter
-          // all translated words should be highlighted
+          // Spliting dosen't help so pass the whole text instead
           let result = translator.traTAm(text);
-          console.log(result)
-          if (result.split() == text.split()) {
-            console.log('same')
+          if (result === text) {
+            return res.json({
+              translation: "Everything looks good to me!"
+            })
+          } else {
+            return res.json({
+              translation: result
+            })
           }
-          res.json({
-            translation: result
-          })
         }
       }
     });
