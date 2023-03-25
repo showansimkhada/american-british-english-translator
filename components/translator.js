@@ -12,7 +12,7 @@ class Translator {
             // use `` to get the value from variables and treat them as string //b for words
             let regex = new RegExp(`(${keys[i]}\\b)`, "gi");
             if (sentence.match(regex)) {
-                let trans = sentence.replace(regex, britishOnly[keys[i]]);
+                let trans = sentence.replace(regex, '<span class="highlight">' + britishOnly[keys[i]] + '</span>');
                 sentence = trans;
             }
         }
@@ -20,7 +20,7 @@ class Translator {
         for (let i = 0; i < keys.length; i++) {
             let regex = new RegExp(`(${americanToBritishSpelling[keys[i]]}\\b)`, "gi");
             if (sentence.match(regex)) {
-                let trans = sentence.replace(regex, keys[i]);
+                let trans = sentence.replace(regex, '<span class="highlight">' + keys[i] + '</span>');
                 sentence = trans;
             }
         }
@@ -28,7 +28,8 @@ class Translator {
         for (let i = 0; i < keys.length; i++) {
             let regex = new RegExp(`(${americanToBritishTitles[keys[i]]}\\b)`, 'gi')
             if (sentence.match(regex)){
-                let trans = sentence.replace(regex, keys[i]);
+                let replace = this.camelCase(keys[i]);
+                let trans = sentence.replace(regex, '<span class="highlight">'+ replace +'</span>');
                 sentence = trans;
             }
         }
@@ -43,7 +44,7 @@ class Translator {
             // use `` to get the value from variables and treat them as string //b for words
             let regex = new RegExp(`(${keys[i]}\\b)`, "gi");
             if (sentence.match(regex)) {
-                let trans = sentence.replace(regex, americanOnly[keys[i]]);
+                let trans = sentence.replace(regex, '<span class="highlight">' + americanOnly[keys[i]] + '</span>');
                 sentence = trans;
             }
         }
@@ -51,7 +52,7 @@ class Translator {
         for (let i = 0; i < keys.length; i++) {
             let regex = new RegExp(`(${keys[i]}\\b)`, "gi");
             if (sentence.match(regex)) {
-                let trans = sentence.replace(regex, americanToBritishSpelling[keys[i]]);
+                let trans = sentence.replace(regex, '<span class="highlight">' + americanToBritishSpelling[keys[i]] + '</span>');
                 sentence = trans;
             }
         }
@@ -59,12 +60,17 @@ class Translator {
         for (let i = 0; i < keys.length; i++) {
             let regex = new RegExp(`(${keys[i]}\\b)`, 'gi')
             if (sentence.match(regex)){
-                console.log(keys[i]);
-                let trans = sentence.replace(regex, americanToBritishTitles[keys[i]]);
+                let replace = this.camelCase(americanToBritishTitles[keys[i]]);
+                let trans = sentence.replace(regex, '<span class="highlight">'+ replace +'</span>');
                 sentence = trans;
             }
         }
         return sentence;
+    }
+
+    camelCase(str) {
+        let result = str.toLowerCase().replace(/(^|\s)\S/g, L => L.toUpperCase());
+        return result;
     }
 }
 

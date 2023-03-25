@@ -9,7 +9,6 @@ module.exports = function (app) {
     .post((req, res) => {
       let locale = req.body.locale;
       var text = req.body.text;
-      text.trim('.');
       if (!text) {
         res.json({
           "error": "No text to translate"
@@ -24,10 +23,12 @@ module.exports = function (app) {
         }
         if (result === text) {
           return res.json({
+            text: text,
             translation: "Everything looks good to me!"
           })
         } else {
           return res.json({
+            text: text,
             translation: result
           })
         }
