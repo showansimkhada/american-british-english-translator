@@ -16,34 +16,20 @@ module.exports = function (app) {
         })
       } else {
         // translate to british
+        var result;
         if (locale === 'american-to-british') {
-          // Translate sentence
-          // Split the words
-          var wordArr = text.split(' ');
-          // check every words and translate
-          var result = [];
-          for (let i = 0; i < wordArr.length; i++) {
-            let word = translator.traTBr(wordArr[i]);
-            if (word !== wordArr[i]) {
-              console.log('highlight')
-            }
-            result.push(word);
-          }
-          res.json({ 
-            translation: result.join(' ')
+          result = translator.traTBr(text);
+        } else {
+          result = translator.traTAm(text);
+        }
+        if (result === text) {
+          return res.json({
+            translation: "Everything looks good to me!"
           })
         } else {
-          // Spliting dosen't help so pass the whole text instead
-          let result = translator.traTAm(text);
-          if (result === text) {
-            return res.json({
-              translation: "Everything looks good to me!"
-            })
-          } else {
-            return res.json({
-              translation: result
-            })
-          }
+          return res.json({
+            translation: result
+          })
         }
       }
     });

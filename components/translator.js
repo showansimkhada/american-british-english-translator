@@ -1,10 +1,7 @@
 const americanOnly = require('./american-only.js');
 const americanToBritishSpelling = require('./american-to-british-spelling.js');
 const americanToBritishTitles = require("./american-to-british-titles.js")
-const britishOnly = require('./british-only.js')
-var AO = new Object(americanOnly);
-var ATBS = new Object(americanToBritishSpelling);
-var ATBT = new Object(americanToBritishTitles);
+const britishOnly = require('./british-only.js');
     
 class Translator {
     traTAm(str) {
@@ -12,20 +9,26 @@ class Translator {
         console.log("Translating to American")
         var keys = Object.keys(britishOnly);
         for (let i = 0; i < keys.length; i++) {
-            // use `` to get the value from variables and treat them as string
+            // use `` to get the value from variables and treat them as string //b for words
             let regex = new RegExp(`(${keys[i]}\\b)`, "gi");
             if (sentence.match(regex)) {
-                let trans = str.replace(regex, britishOnly[keys[i]]);
+                let trans = sentence.replace(regex, britishOnly[keys[i]]);
                 sentence = trans;
             }
         }
-        keys = Object.keys(ATBS);
+        keys = Object.keys(americanToBritishSpelling);
         for (let i = 0; i < keys.length; i++) {
-            let regex = new RegExp(keys[i], "gi");
-            console.log(regex);
+            let regex = new RegExp(`(${americanToBritishSpelling[keys[i]]}\\b)`, "gi");
             if (sentence.match(regex)) {
-                console.log('replace')
-                let trans = str.replace(regex, ATBS[keys[i]]);
+                let trans = sentence.replace(regex, keys[i]);
+                sentence = trans;
+            }
+        }
+        keys = Object.keys(americanToBritishTitles);
+        for (let i = 0; i < keys.length; i++) {
+            let regex = new RegExp(`(${americanToBritishTitles[keys[i]]}\\b)`, 'gi')
+            if (sentence.match(regex)){
+                let trans = sentence.replace(regex, keys[i]);
                 sentence = trans;
             }
         }
@@ -34,17 +37,34 @@ class Translator {
 
     traTBr(str) {
         console.log("Translating to British")
-        var result = '';
-        if (ATBS.hasOwnProperty(str)) {
-            result += ATBS[str];
+        let sentence = str;
+        var keys = Object.keys(americanOnly);
+        for (let i = 0; i < keys.length; i++) {
+            // use `` to get the value from variables and treat them as string //b for words
+            let regex = new RegExp(`(${keys[i]}\\b)`, "gi");
+            if (sentence.match(regex)) {
+                let trans = sentence.replace(regex, americanOnly[keys[i]]);
+                sentence = trans;
+            }
         }
-        else if (AO.hasOwnProperty(str)){
-            result += AO[str];
+        keys = Object.keys(americanToBritishSpelling);
+        for (let i = 0; i < keys.length; i++) {
+            let regex = new RegExp(`(${keys[i]}\\b)`, "gi");
+            if (sentence.match(regex)) {
+                let trans = sentence.replace(regex, americanToBritishSpelling[keys[i]]);
+                sentence = trans;
+            }
         }
-        else{
-            result += str;
+        keys = Object.keys(americanToBritishTitles);
+        for (let i = 0; i < keys.length; i++) {
+            let regex = new RegExp(`(${keys[i]}\\b)`, 'gi')
+            if (sentence.match(regex)){
+                console.log(keys[i]);
+                let trans = sentence.replace(regex, americanToBritishTitles[keys[i]]);
+                sentence = trans;
+            }
         }
-        return result;
+        return sentence;
     }
 }
 
