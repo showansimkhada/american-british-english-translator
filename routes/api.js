@@ -8,18 +8,29 @@ module.exports = function (app) {
   app.route('/api/translate')
     .post((req, res) => {
       let locale = req.body.locale;
-      var text = req.body.text;
-      if (!text) {
+      let text = req.body.text;
+      
+      if (text === '') {
         res.json({
           "error": "No text to translate"
         })
-      } else {
+      }
+      if (!text || !locale){
+        res.json({
+          'error': 'Required field(s) missing'
+        })
+      }
+      else {
         // translate to british
         var result;
         if (locale === 'american-to-british') {
           result = translator.traTBr(text);
+        } else if (locale === 'british-to-american'){
+            result = translator.traTAm(text);
         } else {
-          result = translator.traTAm(text);
+          return res.json({
+            'error': 'Invalid value for locale field'
+          })
         }
         if (result === text) {
           return res.json({
