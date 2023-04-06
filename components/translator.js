@@ -26,7 +26,7 @@ class Translator {
         }
         keys = Object.keys(americanToBritishTitles);
         for (let i = 0; i < keys.length; i++) {
-            let regex = new RegExp(`(${americanToBritishTitles[keys[i]]}\\b)`, 'gi')
+            let regex = new RegExp(`(${americanToBritishTitles[keys[i]]})`, 'gi')
             if (sentence.match(regex)){
                 let replace = this.camelCase(keys[i]);
                 let trans = sentence.replace(regex, '<span class="highlight">'+ replace +'</span>');
@@ -58,7 +58,8 @@ class Translator {
         }
         keys = Object.keys(americanToBritishTitles);
         for (let i = 0; i < keys.length; i++) {
-            let regex = new RegExp(`(${keys[i]}\\b)`, 'gi')
+            let regex = new RegExp(`(${keys[i]})`, 'gi')
+            console.log(regex);
             if (sentence.match(regex)){
                 let replace = this.camelCase(americanToBritishTitles[keys[i]]);
                 let trans = sentence.replace(regex, '<span class="highlight">'+ replace +'</span>');
