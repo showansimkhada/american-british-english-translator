@@ -33,6 +33,16 @@ class Translator {
                 sentence = trans;
             }
         }
+         // change the time pattern
+         // Using group capture to replace time
+         let regex = new RegExp(`(([0-9][0-9])(.|:)([0-9][0-9]))`);
+         if (sentence.match(regex)) {
+            // replacing only 2 and 4 which represents the time from capture group
+            let replace = '$2:$4';
+            let trans = sentence.replace(regex, '<span class="highlight">' + replace + '</span>');
+            console.log(trans);
+            sentence = trans;
+         }
         return sentence;
     }
 
@@ -59,12 +69,20 @@ class Translator {
         keys = Object.keys(americanToBritishTitles);
         for (let i = 0; i < keys.length; i++) {
             let regex = new RegExp(`(${keys[i]})`, 'gi')
-            console.log(regex);
             if (sentence.match(regex)){
                 let replace = this.camelCase(americanToBritishTitles[keys[i]]);
                 let trans = sentence.replace(regex, '<span class="highlight">'+ replace +'</span>');
                 sentence = trans;
             }
+        }
+        // change the time pattern
+        let regex = new RegExp(`(([0-9][0-9])(.|:)([0-9][0-9]))`);
+        if (sentence.match(regex)) {
+            // replacing only 2 and 4 which represents the time from capture group
+            let replace = '$2.$4';
+            let trans = sentence.replace(regex, '<span class="highlight">' + replace + '</span>');
+            console.log(trans);
+            sentence = trans;
         }
         return sentence;
     }
