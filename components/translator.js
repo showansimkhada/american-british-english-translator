@@ -6,7 +6,6 @@ const britishOnly = require('./british-only.js');
 class Translator {
     traTAm(str) {
         let sentence = str;
-        console.log("Translating to American")
         var keys = Object.keys(britishOnly);
         for (let i = 0; i < keys.length; i++) {
             // use `` to get the value from variables and treat them as string //b for words
@@ -35,19 +34,17 @@ class Translator {
         }
          // change the time pattern
          // Using group capture to replace time
-         let regex = new RegExp(`(([0-9][0-9])(.|:)([0-9][0-9]))`);
+         let regex = new RegExp(/(\d+)(.|:)(\d+)/)
          if (sentence.match(regex)) {
             // replacing only 2 and 4 which represents the time from capture group
-            let replace = '$2:$4';
+            let replace = '$1:$3';
             let trans = sentence.replace(regex, '<span class="highlight">' + replace + '</span>');
-            console.log(trans);
             sentence = trans;
          }
         return sentence;
     }
 
     traTBr(str) {
-        console.log("Translating to British")
         let sentence = str;
         var keys = Object.keys(americanOnly);
         for (let i = 0; i < keys.length; i++) {
@@ -76,12 +73,11 @@ class Translator {
             }
         }
         // change the time pattern
-        let regex = new RegExp(`(([0-9][0-9])(.|:)([0-9][0-9]))`);
+        let regex = new RegExp(/(\d+)(.|:)(\d+)/)
         if (sentence.match(regex)) {
             // replacing only 2 and 4 which represents the time from capture group
-            let replace = '$2.$4';
+            let replace = '$1.$3';
             let trans = sentence.replace(regex, '<span class="highlight">' + replace + '</span>');
-            console.log(trans);
             sentence = trans;
         }
         return sentence;
